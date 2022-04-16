@@ -396,8 +396,8 @@ questions:
                 schema:
                   type: boolean
                   default: true
-      # TODO: whitelist:
-      # TODO: blacklist:
+        # TODO: whitelist:
+        # TODO: blacklist:
         - variable: registration
           label: "Registration Configuration"
           schema:
@@ -422,8 +422,8 @@ questions:
                         type: string
                         default: ""
                         private: true
-      # TODO: required3PIDs
-      # TODO: autoJoinRooms
+        # TODO: required3PIDs
+        # TODO: autoJoinRooms
         - variable: security
           label: "Security Configuration"
           schema:
@@ -475,7 +475,7 @@ questions:
             additional_attrs: true
             type: dict
             attrs:
-# TODO: Find the log levels and make the enum's
+              # TODO: Find the log levels and make the enum's
               - variable: rootLogLevel
                 label: "Root Log Level"
                 schema:
@@ -491,7 +491,33 @@ questions:
                 schema:
                   type: string
                   default: "WARNING"
-
+  - variable: appServices
+    group: "Container Configuration"
+    label: "AppService Configuration"
+    schema:
+      type: dict
+      additional_attrs: true
+      attrs:
+        - variable: signal
+          label: "Signal Bridge Configuration"
+          schema:
+            type: dict
+            attrs:
+              - variable: enabled
+                label: "Enable Signal bridge"
+                schema:
+                  type: boolean
+                  default: false
+        - variable: telegram
+          label: "Telegram Bridge Configuration"
+          schema:
+            type: dict
+            attrs:
+              - variable: enabled
+                label: "Enable Telegram bridge"
+                schema:
+                  type: boolean
+                  default: false
   - variable: mail
     group: "Container Configuration"
     label: "Mail Configuration"
@@ -2260,7 +2286,6 @@ questions:
                 schema:
                   type: int
 
-
   - variable: advancedresources
     label: "Set Custom Resource Limits/Requests (Advanced)"
     group: "Resources and Devices"
@@ -2294,7 +2319,7 @@ questions:
                       schema:
                         type: string
                         default: "8Gi"
-                        valid_chars: '^(?!^0(e[0-9]|[EPTGMK]i?|)$)([0-9]+)(|[EPTGMK]i?|e[0-9]+)$'
+                        valid_chars: "^(?!^0(e[0-9]|[EPTGMK]i?|)$)([0-9]+)(|[EPTGMK]i?|e[0-9]+)$"
               - variable: requests
                 label: "Minimum Resources Required (request)"
                 schema:
@@ -2314,7 +2339,7 @@ questions:
                       schema:
                         type: string
                         default: "50Mi"
-                        valid_chars: '^(?!^0(e[0-9]|[EPTGMK]i?|)$)([0-9]+)(|[EPTGMK]i?|e[0-9]+)$'
+                        valid_chars: "^(?!^0(e[0-9]|[EPTGMK]i?|)$)([0-9]+)(|[EPTGMK]i?|e[0-9]+)$"
 
   - variable: deviceList
     label: "Mount USB devices"
@@ -2775,7 +2800,6 @@ questions:
                                             - value: "SCTP"
                                               description: "SCTP"
 
-
   - variable: addons
     group: "Addons"
     label: ""
@@ -3023,7 +3047,6 @@ questions:
                                     type: string
                                     required: true
 
-
         - variable: promtail
           label: "Promtail"
           schema:
@@ -3093,9 +3116,6 @@ questions:
                                   schema:
                                     type: string
                                     required: true
-
-
-
 
         - variable: netshoot
           label: "Netshoot"
