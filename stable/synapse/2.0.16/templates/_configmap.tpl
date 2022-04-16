@@ -150,7 +150,7 @@ data:
     root:
       level: {{ .Values.matrix.logging.rootLogLevel }}
       handlers: [console]
-{{- if .Values.appServices.signal -}}
+{{- if .Values.appServices.signal.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -207,7 +207,7 @@ data:
       # Format examples:
       #   SQLite:   sqlite:///filename.db
       #   Postgres: postgres://username:password@hostname/dbname
-      database: postgres://{{ .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ printf "%v-%v" .Release.Name "postgresql" }}/matrix_bridge_signal
+      database: {{ printf "postgres://%v@%v-%v/%v" .Values.postgresql.postgresqlUsername .Release.Name "postgresql" "matrix_bridge_signal" }}
       # Additional arguments for asyncpg.create_pool() or sqlite3.connect()
       # https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.pool.create_pool
       # https://docs.python.org/3/library/sqlite3.html#sqlite3.connect
@@ -451,4 +451,4 @@ data:
           handlers: 
             - console 
 {{- end }}
-{{- end }}
+{{- end -}}

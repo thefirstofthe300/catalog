@@ -1,4 +1,4 @@
-{{- if .Values.appServices.signal -}}
+{{- if .Values.appServices.signal.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,6 +28,12 @@ spec:
             - /data/config.yaml
           ports:
             - containerPort: {{ .Values.service.signal.ports.signal.targetPort }}
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dbcreds
+                  key: postgresql-password
           volumeMounts:
             - name: signald
               mountPath: /signald
