@@ -1,0 +1,47 @@
+{{- if .Values.appServices.signal -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-bridge-signal
+  labels:
+    bridge: signal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bridge: signal
+  template:
+    metadata:
+      labels:
+        bridge: signal
+    spec:
+      containers:
+        - name: mautrix-signal
+          image: dock.mau.dev/mautrix/signal:v0.2.3
+          command:
+            - python3
+          args: 
+            - -m 
+            - mautrix_signal 
+            - -c 
+            - /data/config.yaml
+          ports:
+            - containerPort: {{ .Values.service.signal.ports.signal.targetPort }}
+          volumeMounts:
+            - name: signald
+              mountPath: /signald
+            - name: config
+              mountPath: /data
+        - name: signald
+          image: signald/signald:0.17.0
+          volumeMounts:
+            - name: signald
+              mountPath: /signald
+      volumes:
+        - name: signald
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}-bridge-signal
+{{- end -}}

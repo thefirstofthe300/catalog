@@ -1,0 +1,30 @@
+{{ range $key, $value := .Values.appServices }}
+{{ if $value.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $.Release.Name }}-init-db-{{ $key }}
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+        - name: createdb
+          image: "{{ $.Values.postgresql.image.repository }}:{{ $.Values.postgresql.image.tag }}"
+          command: 
+            - "createdb"
+            - "-U"
+            - "{{ $.Values.postgresql.postgresqlUsername }}"
+            - "-h"
+            - "{{ $.Release.Name }}-postgresql"
+            - matrix_bridge_{{ $key }}
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-postgres-password
+                  name: dbcreds
+      restartPolicy: OnFailure
+{{- end }}
+{{- end }}

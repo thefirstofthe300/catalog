@@ -39,6 +39,13 @@ service:
         enabled: true
         port: 9093
         targetPort: 9090
+  signal:
+    enabled: false
+    ports:
+      signal:
+        enabled: true
+        port: 29328
+        targetPort: 29328
 
 securityContext:
   allowPrivilegeEscalation: true
@@ -123,6 +130,15 @@ synapse:
     port: 9092
     annotations: true
 
+appServices:
+  signal:
+    enabled: true
+    tokenSalt: CHANGEME
+
+  telegram:
+    enabled: true
+    tokenSalt: CHANGEME
+
 # Runtime configuration for Synapse and settings related to the Matrix protocol
 matrix:
   # Manual overrides for homeserver.yaml, the main configuration file for Synapse
@@ -137,7 +153,7 @@ matrix:
   # This is not necessarily the host name where the service is reachable. In fact, you may want to omit any subdomains
   # from this value as the server name set here will be the name of your homeserver in the fediverse, and will be the
   # domain name at the end of every user's username
-  serverName: "example.com"
+  serverName: "seymour.family"
 
   urlPreviews:
     enabled: false
@@ -309,9 +325,17 @@ coturn:
 
 # Enabled postgres
 postgresql:
+  image:
+    repository: ghcr.io/truecharts/postgresql
+    pullPolicy: IfNotPresent
+    tag: v14.2.0@sha256:a9483c8dec02108731adb732214fc465cd8e1fe9ffe6cbf45b06277ce11d99aa
   env:
     POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
   enabled: true
   existingSecret: "dbcreds"
   postgresqlUsername: synapse
   postgresqlDatabase: synapse
+
+ingress:
+  hosts:
+    synapse: "seymour.family"
